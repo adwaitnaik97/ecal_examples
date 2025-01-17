@@ -1,0 +1,16 @@
+[tool.poetry]
+name = "ecal-pub"
+version = "0.1.0"
+description = "eCAL publisher project"
+authors = ["adwaitnaik97 <adwait@aidrivers.ai>"]
+license = "MIT"
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.12"
+pytest = "^8.3.4"
+pyvista = "^0.44.2"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
