@@ -2,11 +2,9 @@ import sys
 
 import time
 
+import ecal.core.core as ecal_core # type: ignore
 
-import ecal.core.core as ecal_core
-
-from ecal.core.publisher import ProtoPublisher
-
+from ecal.core.publisher import ProtoPublisher # type: ignore
 
 # Import the "hello_world_pb2.py" file that we have just generated from the
 
@@ -83,11 +81,7 @@ if __name__ == "__main__":
 
     time.sleep(1)
 
-    
-
     counter = counter + 1
-
-  
 
   # finalize eCAL API
 

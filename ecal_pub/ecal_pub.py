@@ -1,8 +1,7 @@
 import sys
 import time
-import ecal.core.core as ecal_core
-from ecal.core.publisher import StringPublisher
-
+import ecal.core.core as ecal_core # type: ignore
+from ecal.core.publisher import StringPublisher # type: ignore
 
 if __name__ == "__main__":
 

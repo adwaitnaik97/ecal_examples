@@ -2,10 +2,9 @@ import sys
 
 import time
 
+import ecal.core.core as ecal_core # type: ignore
 
-import ecal.core.core as ecal_core
-
-from ecal.core.subscriber import ProtoSubscriber
+from ecal.core.subscriber import ProtoSubscriber # type: ignore
 
 # Import the "hello_world_pb2.py" file that we have just generated from the
 
@@ -48,15 +47,11 @@ if __name__ == "__main__":
 
   sub.set_callback(callback)
 
-  
-
   # Just don't exit
 
   while ecal_core.ok():
 
     time.sleep(0.5)
-
-  
 
   # finalize eCAL API
 
