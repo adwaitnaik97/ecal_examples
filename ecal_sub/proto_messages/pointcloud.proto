@@ -1,0 +1,17 @@
+syntax = "proto3";
+
+package proto_messages;
+
+message PointXYZI 
+{
+    float x = 1;
+    float y = 2;
+    float z = 3;
+    float i = 4;  
+}
+
+message PointCloud
+{
+    string header             = 1;
+    repeated PointXYZI points = 2;
+}
