@@ -1,0 +1,77 @@
+syntax = "proto3";
+
+package pcl_proto;
+
+message PointXYZI
+{
+    float x      = 1;
+    float y      = 2;
+    float z      = 3;
+    float i      = 4;
+}
+
+message PointRGBA
+{
+    float r      = 1;
+    float g      = 2;
+    float b      = 3;
+    float a      = 4;
+}
+
+message PointCloud
+{
+    string              header = 1;
+    repeated PointXYZI  points = 2;
+}
+
+message OntologyLanePoint
+{
+    PointXYZI point         = 1;
+    float     lane_direction = 3;
+    int32     type           = 4;
+    int32     bay_track      = 5;
+    int32     overtake       = 6;
+}
+message OntologyLanePointCloud
+{
+    string                      header = 1;
+    repeated OntologyLanePoint  points = 2;
+}
+
+message OntologyRoadNetworkPoint
+{
+    PointXYZI   point         = 1;
+    float       direction     = 2;
+    int32       weights       = 3;
+    int32       wide_turns    = 4;
+    int32       lane_change   = 5;
+    int32       exits         = 6;
+    float       exit_velocity = 7;
+}
+
+message OntologyRoadNetworkPointCloud
+{
+    string                            header = 1;
+    repeated OntologyRoadNetworkPoint points = 2;
+}
+
+message Marker
+{
+    string      header       = 1;
+    string      ns           = 2;
+    string      text         = 3;
+
+    // object ID useful in conjunction with the namespace for manipulating and deleting the object later
+    int32       id           = 4;
+    int32       type         = 5; // Type of object
+
+    int32       action       = 6;
+    PointXYZI   pose         = 7; // Pose of the object is in xyz and orientation w is in I
+    PointXYZI   scale        = 8; // scale is in xyz
+    PointRGBA   color        = 9; // color is in rgba
+}
+
+message MarkerArray
+{
+    repeated Marker markers = 1;
+}
