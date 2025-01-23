@@ -1,35 +1,57 @@
 import sys
 import time
-import open3d as o3d
 import numpy as np
-
+import open3d as o3d
 import ecal.core.core as ecal_core
 from ecal.core.subscriber import ProtoSubscriber
-
-##import proto_messages.pointcloud_pb2 as pointcloud_pb2
-
 import proto_messages.leroy_pointlcoud_pb2 as leroy_pointcloud_pb2
 
-def rotate_view(vis):
-    ctr = vis.get_view_control()
-    ctr.rotate(10.0, 0.0)
-    return False
-
-def callback(topic_name, point_cloud_message, time):
+def pointcloud_callback(topic_name, lane_point_cloud_message, time):    
     points = []
-    print(len(points))
-    for point in point_cloud_message.points:
+
+    for point in lane_point_cloud_message.points:
         points.append([point.x, point.y, point.z])
     
-    if points: 
+    if points:
         pcd = o3d.geometry.PointCloud()
         pcd.points = o3d.utility.Vector3dVector(np.array(points))
+        pcd.paint_uniform_color([0.706, 0.706, 0])
         o3d.visualization.draw_geometries([pcd])
-                
+
+def marker_callback(topic_name, color_message, time):
+    marker_color = []
+    #marker_text = ""
+    marker_pose = []
+    marker_dict = {}  # Initialize the dictionary to store marker_pose as keys and marker_text as values
+    markersArray = color_message.markers
+
+    for color in markersArray:
+        marker_color.append([(color.color.r)/255.0, (color.color.g)/255.0, (color.color.b)/255.0])
+
+    for pose in markersArray:
+        marker_pose.append([pose.pose.x, pose.pose.y, pose.pose.z])
+
+    if marker_pose:
+        pcd_markers = o3d.geometry.PointCloud()
+        pcd_markers.points = o3d.utility.Vector3dVector(np.array(marker_pose))
+        pcd_markers.paint_uniform_color([1, 0.706, 1])
+        o3d.visualization.draw_geometries([pcd_markers])
+    
+    """
+    for text in markersArray:
+        marker_text += str(text.text) + " "
+        pcd_text = o3d.t.geometry.TriangleMesh.create_text(marker_text[0], 0.5, 0.1)
+        pcd_text.compute_vertex_normals()
+        pcd_text.paint_uniform_color([0, 0, 1])
+        o3d.visualization.draw_geometries([pcd_text])
+    """
+      
 if __name__ == "__main__":
     ecal_core.initialize(sys.argv, "Pointcloud Subscriber")
-    pointcloud_sub = ProtoSubscriber("", leroy_pointcloud_pb2.PointCloud)
-    pointcloud_sub.set_callback(callback)
+    lane_pointcloud_sub = ProtoSubscriber("lane_pointcloud", leroy_pointcloud_pb2.PointCloud)
+    lane_id_markers_sub = ProtoSubscriber("lane_id_markers", leroy_pointcloud_pb2.MarkerArray)
+    lane_pointcloud_sub.set_callback(pointcloud_callback)
+    lane_id_markers_sub.set_callback(marker_callback)
  
     try:
         while ecal_core.ok():
